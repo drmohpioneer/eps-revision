@@ -1,0 +1,325 @@
+<meta charset="utf-8">
+<title>E8 - Atrial Fibrillation and Anticoagulation</title>
+<style>
+  :root{--bg:#0e1220;--panel:#161c2e;--ink:#e8ecf5;--muted:#95a1bd;--accent:#7aa2ff;--pos:#38a169;--neg:#e53e3e;--iso:#718096;--warn:#e0a53e;--riv:#f6a54a;--api:#4ad0a3;--dab:#c48af6;--edo:#7aa2ff}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,Segoe UI,Roboto,sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:22px}
+  h1{font-size:22px;margin:0 0 4px}
+  .sub{color:var(--muted);margin:0 0 18px;font-size:14px}
+  .card{background:var(--panel);border:1px solid #232b45;border-radius:14px;padding:16px;margin-bottom:18px}
+  .card h2{font-size:15px;margin:0 0 12px;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+  .seg{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+  .seg button{flex:1;min-width:96px;background:#0b1020;border:1px solid #2b3552;color:var(--ink);border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;transition:.15s}
+  .seg button.on{background:#1a4b7a;border-color:var(--accent);color:#dbe9ff}
+  .seg button:hover{border-color:var(--accent)}
+  .pane{display:none;background:#0b1020;border-radius:10px;padding:14px;border-left:3px solid var(--accent)}
+  .pane.on{display:block}
+  .pane b{color:#fff}
+  .pane .k{font-size:12px;color:var(--accent);font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+  .rule{background:#1c2540;border-left:3px solid var(--accent);padding:10px 12px;border-radius:6px;font-size:14px;margin-top:10px}
+  .warnrule{background:#3a2f16;border-left:3px solid var(--warn);padding:10px 12px;border-radius:6px;font-size:14px;margin-top:10px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .foot{color:var(--muted);font-size:12px;margin-top:6px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px}
+  th,td{border:1px solid #2b3552;padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:#0b1020;color:var(--accent);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+  .yes{color:#a7e8c1;font-weight:800}.no{color:#f2a9a9;font-weight:800}
+  ul{margin:8px 0 0;padding-left:20px}li{margin:5px 0}
+  .hint{color:var(--muted);font-size:12.5px;margin:2px 0 10px}
+  .badge{display:inline-block;font-size:12px;font-weight:800;padding:3px 10px;border-radius:20px;margin:2px 4px 2px 0}
+  .b-riv{background:#5a4416;color:#f2d59a}.b-api{background:#12503c;color:#a4f0d4}.b-dab{background:#3d1e5a;color:#dcb8f6}.b-edo{background:#1a3a6a;color:#bcd6ff}
+  .kk{font-size:11px;font-weight:800;text-transform:uppercase;display:block;margin-bottom:3px;color:var(--accent)}
+  /* CHA2DS2-VASc calculator */
+  .calc{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:640px){.calc{grid-template-columns:1fr}}
+  .fac{display:flex;justify-content:space-between;align-items:center;gap:8px;background:#0b1020;border:1px solid #2b3552;border-radius:8px;padding:9px 11px;cursor:pointer;transition:.15s;font-size:13.5px}
+  .fac:hover{border-color:var(--accent)}
+  .fac.on{background:#12303f;border-color:var(--pos)}
+  .fac .pts{font-weight:800;color:var(--muted);min-width:26px;text-align:right}
+  .fac.on .pts{color:#a7e8c1}
+  .agegrp{grid-column:1 / -1;display:flex;gap:6px}
+  .agegrp button{flex:1;background:#0b1020;border:1px solid #2b3552;color:var(--ink);border-radius:8px;padding:9px;font-size:13px;font-weight:700;cursor:pointer}
+  .agegrp button.on{background:#1a4b7a;border-color:var(--accent);color:#dbe9ff}
+  .scorebox{margin-top:14px;background:#0b1020;border-radius:10px;padding:14px;border-left:3px solid var(--accent)}
+  .scoreN{font-size:34px;font-weight:800;color:#fff;line-height:1}
+  .rec{font-size:14px;font-weight:700;margin-top:6px}
+  .rec.treat{color:#a7e8c1}.rec.grey{color:#f0dca0}.rec.none{color:#f2a9a9}
+  .ctrls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .ctrls button{background:#1a2a4a;border:1px solid #2b3552;color:#dbe9ff;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer}
+  .ctrls button:hover{border-color:var(--accent)}
+  .modnote{font-size:12.5px;color:var(--warn);margin-top:8px;min-height:1px}
+  /* timeline */
+  .tl{position:relative;margin:18px 6px 8px}
+  .tlbar{position:relative;height:8px;background:#0b1020;border-radius:5px;border:1px solid #2b3552}
+  .tlfill{position:absolute;left:0;top:0;height:100%;width:0;background:linear-gradient(90deg,#38a169,#e0a53e,#e53e3e);border-radius:5px;transition:width .8s ease}
+  .tlmark{position:absolute;top:-6px;width:18px;height:18px;border-radius:50%;background:#7aa2ff;border:2px solid #fff;left:0;transform:translateX(-9px);transition:left .8s ease;box-shadow:0 0 8px rgba(122,162,255,.6)}
+  .tlticks{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--muted)}
+  .tlout{margin-top:12px;background:#0b1020;border-radius:8px;padding:12px;border-left:3px solid var(--accent);font-size:14px;min-height:20px}
+</style>
+
+<div class="wrap">
+  <h1>E8 - Atrial Fibrillation and Anticoagulation</h1>
+  <p class="sub">A fibrillating atrium throws clots. Score the stroke risk against the bleed risk, pick and dose the anticoagulant, time it safely around any stroke, and control the rhythm without a pro-arrhythmic drug. Exam anchors: Q11 (rivaroxaban 20 mg OD), Q12 (propafenone is the EXCEPT in an ischaemic patient), Q18 (restart OAC 1 day after a TIA), Q19 (CHA2DS2-VASc, with the key conflict), Q20 (rtPA not if INR &gt; 1.7), Q21 (apixaban best for GI bleed).</p>
+
+  <!-- 1. CHA2DS2-VASc CALCULATOR -->
+  <div class="card">
+    <h2>1. CHA2DS2-VASc calculator + HAS-BLED (click each factor)</h2>
+    <p class="hint">Toggle the risk factors on. The score updates live and gives the anticoagulation recommendation. Remember the two "2" factors (A2 = age &gt;=75, S2 = prior stroke/TIA) and that <b>female sex only adds its point when at least one other factor is present</b>. Use the button below to load the exam case (Q19).</p>
+    <div class="ctrls">
+      <button id="loadQ19">Load the Q19 case</button>
+      <button id="reset">Reset</button>
+    </div>
+    <div class="calc" id="calc">
+      <div class="fac" data-pts="1" data-key="chf"><span>C - Congestive HF / LV dysfunction</span><span class="pts">1</span></div>
+      <div class="fac" data-pts="1" data-key="htn"><span>H - Hypertension (treated or not)</span><span class="pts">1</span></div>
+      <div class="fac" data-pts="1" data-key="dm"><span>D - Diabetes (fasting &gt;=126 or treated)</span><span class="pts">1</span></div>
+      <div class="fac" data-pts="2" data-key="stroke"><span>S2 - Prior stroke / TIA / thromboembolism</span><span class="pts">2</span></div>
+      <div class="fac" data-pts="1" data-key="vasc"><span>V - Vascular disease (MI, PAD, aortic plaque)</span><span class="pts">1</span></div>
+      <div class="fac" data-pts="1" data-key="female"><span>Sc - Sex category female</span><span class="pts">1</span></div>
+      <div class="agegrp" id="ageg">
+        <button data-age="0" class="on">Age under 65 (0)</button>
+        <button data-age="1">Age 65 to 74 (+1)</button>
+        <button data-age="2">Age &gt;= 75 (+2)</button>
+      </div>
+    </div>
+    <div class="scorebox">
+      <div class="scoreN" id="scoreN">0</div>
+      <div class="rec none" id="rec">Score 0. No anticoagulation needed.</div>
+      <div class="modnote" id="modnote"></div>
+    </div>
+    <div class="warnrule"><b>Threshold:</b> anticoagulate a <b>man with a score &gt;= 2</b> and a <b>woman with a score &gt;= 3</b> (the higher female threshold exists because 1 of her points is just being female). <b>HAS-BLED</b> scores bleeding risk (H uncontrolled HTN, Abnormal renal/liver, Stroke, Bleeding history, Labile INR, Elderly &gt;65, Drugs/alcohol); a score &gt;= 3 is high but <b>does NOT withhold anticoagulation</b>, it flags the modifiable factors to fix.</div>
+  </div>
+
+  <!-- 2. NOAC DOSING -->
+  <div class="card">
+    <h2>2. The NOACs: which drug, what dose, when to reduce (click one)</h2>
+    <p class="hint">Four drugs, two mechanisms. <b>-xaban = Xa ban</b> (apixaban, rivaroxaban, edoxaban block factor Xa); <b>dabigatran</b> blocks thrombin. Default for non-valvular AF. Click a drug for its standard dose and its reduction trigger.</p>
+    <div class="seg" data-seg="noac">
+      <button data-p="riv" class="on">Rivaroxaban</button>
+      <button data-p="api">Apixaban</button>
+      <button data-p="dab">Dabigatran</button>
+      <button data-p="edo">Edoxaban</button>
+    </div>
+
+    <div class="pane on" data-pane="riv">
+      <span class="k">Rivaroxaban</span> <span class="badge b-riv">Factor Xa inhibitor</span>
+      <p style="margin:8px 0"><b>Standard AF dose: 20 mg once daily</b> (with food). <b>Reduce to 15 mg once daily if CrCl 15 to 49 mL/min.</b></p>
+      <div class="warnrule"><b>This is Q11:</b> the non-valvular AF dose of rivaroxaban is <b>20 mg once daily</b> (15 mg OD if CrCl 15 to 49). Do not confuse it with the lower VTE-prophylaxis or vascular-dose numbers. Note: rivaroxaban <b>increases GI bleeding</b>, so it is not the first pick for a GI bleeder.</div>
+    </div>
+
+    <div class="pane" data-pane="api">
+      <span class="k">Apixaban</span> <span class="badge b-api">Factor Xa inhibitor</span>
+      <p style="margin:8px 0"><b>Standard AF dose: 5 mg twice daily.</b> <b>Reduce to 2.5 mg twice daily if any 2 of 3:</b> age &gt;= 80, weight &lt;= 60 kg, creatinine &gt;= 1.5 mg/dL.</p>
+      <div class="warnrule"><b>This is Q21:</b> apixaban has the <b>most favourable GI-bleeding profile</b> of the NOACs, so in a patient at high risk of gastrointestinal bleeding, <b>apixaban 5 mg twice daily</b> is the best choice. (Dabigatran 150 and rivaroxaban both raise GI bleeds.)</div>
+    </div>
+
+    <div class="pane" data-pane="dab">
+      <span class="k">Dabigatran</span> <span class="badge b-dab">Direct thrombin (IIa) inhibitor</span>
+      <p style="margin:8px 0"><b>Standard AF dose: 150 mg twice daily.</b> <b>Reduce to 110 mg twice daily</b> in the elderly (age &gt;= 80), high bleeding risk, or moderate renal impairment.</p>
+      <div class="rule">The only <b>thrombin</b> inhibitor of the group (the others block factor Xa). <b>Dabigatran 150 mg raises GI bleeding</b> and needs decent renal function (mostly renally cleared). <b>Contraindicated in mechanical valves</b> (it caused harm there).</div>
+    </div>
+
+    <div class="pane" data-pane="edo">
+      <span class="k">Edoxaban</span> <span class="badge b-edo">Factor Xa inhibitor</span>
+      <p style="margin:8px 0"><b>Standard AF dose: 60 mg once daily.</b> <b>Reduce to 30 mg once daily</b> if CrCl 15 to 50, weight &lt;= 60 kg, or on a strong P-gp inhibitor.</p>
+      <div class="rule">Curiously, edoxaban is <b>not recommended when renal function is too good</b> (very high CrCl), because clearance is too fast for reliable effect.</div>
+    </div>
+
+    <table>
+      <tr><th>Drug</th><th>Target</th><th>Standard AF dose</th><th>Reduced dose</th><th>Reduce when</th></tr>
+      <tr><td><b>Rivaroxaban</b></td><td>Factor Xa</td><td>20 mg once daily</td><td>15 mg once daily</td><td>CrCl 15 to 49</td></tr>
+      <tr><td><b>Apixaban</b></td><td>Factor Xa</td><td>5 mg twice daily</td><td>2.5 mg twice daily</td><td>any 2 of: age &gt;=80, wt &lt;=60 kg, Cr &gt;=1.5</td></tr>
+      <tr><td><b>Dabigatran</b></td><td>Thrombin (IIa)</td><td>150 mg twice daily</td><td>110 mg twice daily</td><td>elderly / bleed risk / renal</td></tr>
+      <tr><td><b>Edoxaban</b></td><td>Factor Xa</td><td>60 mg once daily</td><td>30 mg once daily</td><td>CrCl 15 to 50, wt &lt;=60, P-gp inhibitor</td></tr>
+    </table>
+    <div class="warnrule"><b>"Non-valvular" = NOAC eligible.</b> The only exclusions ("valvular AF") are a <b>mechanical prosthetic valve</b> and <b>moderate-to-severe mitral stenosis</b>: those must use <b>warfarin</b>, never a NOAC. Every other valve situation still uses a NOAC.</div>
+  </div>
+
+  <!-- 3. STROKE TIMING + THROMBOLYSIS -->
+  <div class="card">
+    <h2>3. Timing OAC around a stroke: the 1-3-6-12 rule (click a severity)</h2>
+    <p class="hint">After an ischaemic brain event the infarct can bleed (haemorrhagic transformation). The bigger the infarct, the longer you wait before (re)starting anticoagulation. Click a severity to see the delay move along the timeline.</p>
+    <div class="seg" data-seg="tl">
+      <button data-sev="tia" data-day="1" data-pct="4" class="on">TIA</button>
+      <button data-sev="mild" data-day="3" data-pct="25">Mild stroke</button>
+      <button data-sev="mod" data-day="6" data-pct="50">Moderate stroke</button>
+      <button data-sev="sev" data-day="12" data-pct="100">Severe stroke</button>
+    </div>
+    <div class="tl">
+      <div class="tlbar"><div class="tlfill" id="tlfill"></div><div class="tlmark" id="tlmark"></div></div>
+      <div class="tlticks"><span>Day 1</span><span>Day 3</span><span>Day 6</span><span>Day 12</span></div>
+    </div>
+    <div class="tlout" id="tlout"><b>TIA</b>: restart OAC after <b>1 day</b>. No established infarct, so lowest bleeding risk. (This is Q18.)</div>
+    <div class="warnrule"><b>Two different numbers, do not fuse them:</b> the <b>1-3-6-12 ladder</b> answers "when do I put the patient back on their long-term anticoagulant?" (TIA 1, mild 3, moderate 6, severe 12 days). The <b>INR 1.7 gate</b> answers a different acute question below.</div>
+    <div class="rule" style="margin-top:12px"><b>Thrombolysis gate (Q20):</b> systemic thrombolysis with <b>rtPA / alteplase is NOT recommended if the INR is above 1.7</b>. An already-anticoagulated brain that you thrombolyse bleeds catastrophically. (The same bar applies to a recent DOAC within its exclusion window.)</div>
+  </div>
+
+  <!-- 4. RHYTHM vs RATE + DRUG SAFETY -->
+  <div class="card">
+    <h2>4. Rhythm vs rate control, and antiarrhythmic drug safety (Q12)</h2>
+    <p class="hint">Two strategies. Rate control accepts the AF and slows the ventricle; rhythm control restores sinus rhythm. The drug that maintains sinus rhythm depends on whether the heart is normal or diseased. Click to compare.</p>
+    <div class="seg" data-seg="rc">
+      <button data-p="rate" class="on">Rate control</button>
+      <button data-p="normal">Rhythm: normal heart</button>
+      <button data-p="disease">Rhythm: ischaemic / structural</button>
+    </div>
+
+    <div class="pane on" data-pane="rate">
+      <span class="k">Rate control</span>
+      <p style="margin:8px 0">Accept the AF, slow the ventricular response. Agents:</p>
+      <ul>
+        <li><b>Beta-blockers</b> (first line for most).</li>
+        <li><b>Non-dihydropyridine calcium channel blockers</b>: diltiazem, verapamil (avoid in HFrEF).</li>
+        <li><b>Digoxin</b>: add-on, or in heart failure / sedentary patients.</li>
+      </ul>
+    </div>
+
+    <div class="pane" data-pane="normal">
+      <span class="k">Rhythm control: structurally NORMAL heart</span>
+      <p style="margin:8px 0">Maintain sinus rhythm. With a normal heart you can use the <b>class Ic drugs</b>:</p>
+      <ul>
+        <li><b>Flecainide</b> and <b>propafenone</b> (often "pill in the pocket").</li>
+        <li>Sotalol, dronedarone, amiodarone are also options.</li>
+      </ul>
+      <div class="rule"><b>Class Ic is safe here</b> precisely because there is no scar or ischaemia to make it pro-arrhythmic.</div>
+    </div>
+
+    <div class="pane" data-pane="disease">
+      <span class="k">Rhythm control: ISCHAEMIC or structural disease</span>
+      <p style="margin:8px 0"><b>Class Ic (flecainide, propafenone) is CONTRAINDICATED</b> (pro-arrhythmic in a scarred/ischaemic ventricle, the CAST-trial lesson). Acceptable agents:</p>
+      <ul>
+        <li><span class="yes">OK</span> <b>Amiodarone</b> (safe in structural disease and heart failure).</li>
+        <li><span class="yes">OK</span> <b>Sotalol</b>, <b>dofetilide</b> (watch QT and renal function).</li>
+        <li><span class="yes">OK</span> <b>Dronedarone</b> - but <b>contraindicated in heart failure</b>.</li>
+        <li><span class="no">NO</span> <b>Flecainide, propafenone</b> (class Ic).</li>
+      </ul>
+      <div class="warnrule"><b>This is Q12:</b> for rhythm control in an ischaemic patient after cardioversion, the acceptable agents are amiodarone, sotalol, and dronedarone; the EXCEPT is <b>propafenone</b> (the only class Ic drug in the list). Answer <b>D</b>.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Generic segment/pane toggler (used by NOAC and rhythm-control cards)
+  document.querySelectorAll('.seg[data-seg="noac"], .seg[data-seg="rc"]').forEach(function(seg){
+    seg.addEventListener('click', function(e){
+      var b = e.target.closest('button'); if(!b) return;
+      var card = seg.closest('.card');
+      seg.querySelectorAll('button').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on');
+      var p = b.getAttribute('data-p');
+      card.querySelectorAll('.pane').forEach(function(pane){
+        pane.classList.toggle('on', pane.getAttribute('data-pane')===p);
+      });
+    });
+  });
+
+  // ---- CHA2DS2-VASc calculator ----
+  var facs = document.querySelectorAll('#calc .fac');
+  var ageBtns = document.querySelectorAll('#ageg button');
+  var scoreN = document.getElementById('scoreN');
+  var recEl = document.getElementById('rec');
+  var modnote = document.getElementById('modnote');
+
+  function ageVal(){
+    var on = document.querySelector('#ageg button.on');
+    return on ? parseInt(on.getAttribute('data-age'),10) : 0;
+  }
+  function isOn(key){
+    var el = document.querySelector('#calc .fac[data-key="'+key+'"]');
+    return el && el.classList.contains('on');
+  }
+  function recompute(){
+    var nonSex = 0;
+    facs.forEach(function(f){
+      if(f.getAttribute('data-key')==='female') return;
+      if(f.classList.contains('on')) nonSex += parseInt(f.getAttribute('data-pts'),10);
+    });
+    nonSex += ageVal();
+    var female = isOn('female');
+    // female sex only adds a point when at least one other factor is present
+    var femalePt = (female && nonSex >= 1) ? 1 : 0;
+    var total = nonSex + femalePt;
+    scoreN.textContent = total;
+
+    // recommendation by sex-specific threshold
+    var treat, cls, txt;
+    if(female){
+      if(total >= 3){ txt='Anticoagulate (woman, score >= 3).'; cls='treat'; }
+      else if(total === 2){ txt='Grey zone (woman, score 2 = female + one factor). Consider anticoagulation.'; cls='grey'; }
+      else { txt='No anticoagulation (female sex alone does not count).'; cls='none'; }
+    } else {
+      if(total >= 2){ txt='Anticoagulate (man, score >= 2).'; cls='treat'; }
+      else if(total === 1){ txt='Grey zone (man, score 1). Consider anticoagulation.'; cls='grey'; }
+      else { txt='No anticoagulation (score 0).'; cls='none'; }
+    }
+    recEl.className = 'rec ' + cls;
+    recEl.textContent = 'Score ' + total + '. ' + txt;
+
+    // modifier note
+    if(female && nonSex === 0){
+      modnote.textContent = 'Note: female sex is selected but no other factor is present, so the Sc point does NOT count (score stays 0). This is the "modifier, not standalone" rule.';
+    } else if(female){
+      modnote.textContent = 'Female sex counts here (+1) because at least one other risk factor is present.';
+    } else {
+      modnote.textContent = '';
+    }
+  }
+
+  facs.forEach(function(f){
+    f.addEventListener('click', function(){ f.classList.toggle('on'); recompute(); });
+  });
+  ageBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      ageBtns.forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on'); recompute();
+    });
+  });
+
+  document.getElementById('reset').addEventListener('click', function(){
+    facs.forEach(function(f){f.classList.remove('on')});
+    ageBtns.forEach(function(x){x.classList.remove('on')});
+    document.querySelector('#ageg button[data-age="0"]').classList.add('on');
+    recompute();
+    modnote.textContent = '';
+  });
+
+  document.getElementById('loadQ19').addEventListener('click', function(){
+    // 35yo woman, treated HTN, prior TIA, glucose 110 (NOT diabetes)
+    facs.forEach(function(f){f.classList.remove('on')});
+    document.querySelector('#calc .fac[data-key="htn"]').classList.add('on');
+    document.querySelector('#calc .fac[data-key="stroke"]').classList.add('on');
+    document.querySelector('#calc .fac[data-key="female"]').classList.add('on');
+    ageBtns.forEach(function(x){x.classList.remove('on')});
+    document.querySelector('#ageg button[data-age="0"]').classList.add('on'); // age 35 = under 65
+    recompute();
+    modnote.innerHTML = 'Q19 case loaded: HTN 1 + prior TIA 2 + female 1 = <b>4</b> (glucose 110 = impaired fasting glucose, NOT diabetes, so 0; age 35 = 0). &#9888; The answer KEY says <b>3</b>, which only works if the controlled/treated hypertension is not counted. Answer per your course, but the clinically correct score is <b>4</b>.';
+  });
+
+  recompute();
+
+  // ---- 1-3-6-12 timeline ----
+  var tlSeg = document.querySelector('.seg[data-seg="tl"]');
+  var tlfill = document.getElementById('tlfill');
+  var tlmark = document.getElementById('tlmark');
+  var tlout = document.getElementById('tlout');
+  var tlText = {
+    tia:  '<b>TIA</b>: restart OAC after <b>1 day</b>. No established infarct, so lowest bleeding risk. (This is Q18.)',
+    mild: '<b>Mild / small non-disabling stroke</b>: restart OAC after <b>3 days</b>. (Matches the recall "in a mild stroke we stop anticoagulation for about 3 days".)',
+    mod:  '<b>Moderate stroke</b>: restart OAC after <b>6 days</b>.',
+    sev:  '<b>Severe / large stroke</b>: wait <b>12 days</b> (some centres 2 to 3 weeks). Highest haemorrhagic-transformation risk.'
+  };
+  tlSeg.addEventListener('click', function(e){
+    var b = e.target.closest('button'); if(!b) return;
+    tlSeg.querySelectorAll('button').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    var pct = b.getAttribute('data-pct');
+    tlfill.style.width = pct + '%';
+    tlmark.style.left = pct + '%';
+    tlout.innerHTML = tlText[b.getAttribute('data-sev')];
+  });
+  // init timeline at TIA
+  tlfill.style.width = '4%'; tlmark.style.left = '4%';
+</script>
