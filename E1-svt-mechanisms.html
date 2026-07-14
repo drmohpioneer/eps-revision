@@ -107,14 +107,14 @@ const M = {
     path:[[250,113],[250,153],AT,HIS,VENT,[300,300],[405,300],ACC_B,ACC_T,[250,110]], // down AVN, up accessory
     ecg:{p:"after", qrs:250, pAfter:305},
     explain:"Down the <b>AV node</b> (antegrade), up the <b>accessory pathway</b> (retrograde). Because it goes down the normal system, the <b>QRS is narrow</b>. The P is retrograde, landing just <b>after</b> the QRS → short RP.",
-    pearl:"Orthodromic = <b>ortho-normal-down</b> → narrow QRS. Accessory pathway is the <b>retrograde limb</b>. It is the <b>more common</b> form of AVRT (Q16 correct answer)."
+    pearl:"Orthodromic = <b>ortho-normal-down</b> → narrow QRS. Accessory pathway is the <b>retrograde limb</b>. It is the <b>more common</b> form of AVRT (Q16 correct answer). <br><b>Note (PJRT):</b> a special orthodromic AVRT using a <b>slow, concealed, decremental posteroseptal</b> pathway (retrograde only). The slow retrograde conduction pushes the inverted P far back, so it looks like a <b>LONG-RP, incessant</b> tachycardia and can cause a tachycardia-induced cardiomyopathy."
   },
   anti:{
     name:"Antidromic AVRT", tag:"wide", rp:"wide",
     path:[[250,110],ACC_T,ACC_B,[405,300],[300,300],VENT,HIS,AT,[250,110]], // down accessory, up AVN
     ecg:{p:"wide", qrs:250, pAfter:null, wide:true},
     explain:"Down the <b>accessory pathway</b> first → ventricle activates outside the normal system → <b>wide, fully pre-excited QRS</b> (a maximally-delta beat). Up the AV node retrograde. Looks like VT — but it's an AVRT.",
-    pearl:"Antidromic = <b>anti-normal</b>, down the accessory → <b>WIDE QRS</b>, less common than orthodromic. A wide-complex regular tachy in a known WPW patient."
+    pearl:"Antidromic = <b>anti-normal</b>, down the accessory → <b>WIDE QRS</b>, less common than orthodromic. A wide-complex regular tachy in a known WPW patient. <br><b>Note (Mahaim fibres):</b> <b>atriofascicular</b> pathways with <b>decremental, AV-node-like, antegrade-only</b> conduction, inserting near the RV apex / right bundle. They give a wide <b>LBBB-morphology, left-axis</b> antidromic-type tachycardia (baseline ECG often near-normal). Antegrade-only, so they drive antidromic (not orthodromic) circuits."
   },
   at:{
     name:"Focal Atrial Tachycardia", tag:"long", rp:"long",
