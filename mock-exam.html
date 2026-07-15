@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mock Exam — EPS + CHD (100 Q)</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.55 -apple-system, "Segoe UI", Roboto, sans-serif; color: #1a2230; background: #f4f6fb; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 20px 16px 80px; }
+  h1 { font-size: 22px; margin: 4px 0 6px; color: #12233f; }
+  .sub { color: #5a6b85; font-size: 13.5px; margin: 0 0 18px; }
+  .bar { position: sticky; top: 0; z-index: 5; background: #f4f6fb; padding: 10px 0; border-bottom: 1px solid #dde4ef; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .bar button { background: #2b6cb0; color: #fff; border: 0; border-radius: 8px; padding: 8px 14px; font-size: 13.5px; cursor: pointer; font-weight: 600; }
+  .bar button.sec { background: #1c3253; }
+  .bar span { font-size: 12.5px; color: #5a6b85; }
+  .q { background: #fff; border: 1px solid #e3e9f3; border-radius: 12px; padding: 14px 16px; margin: 12px 0; box-shadow: 0 1px 3px rgba(20,40,80,.05); }
+  .q .n { font-weight: 700; color: #2b6cb0; }
+  .q .stem { font-weight: 600; margin: 2px 0 8px; }
+  .opts { list-style: none; margin: 0; padding: 0; }
+  .opts li { padding: 3px 0 3px 26px; position: relative; color: #26324a; }
+  .opts li .lt { position: absolute; left: 4px; font-weight: 700; color: #7787a3; }
+  details.ans { margin-top: 9px; border-top: 1px dashed #dbe2ee; padding-top: 8px; }
+  details.ans summary { cursor: pointer; color: #2b6cb0; font-size: 13px; font-weight: 600; list-style: none; user-select: none; }
+  details.ans summary::-webkit-details-marker { display: none; }
+  details.ans summary::before { content: "\25B8 "; }
+  details.ans[open] summary::before { content: "\25BE "; }
+  details.ans .body { margin-top: 6px; background: #eaf6ee; border-left: 3px solid #2f9e56; border-radius: 6px; padding: 8px 11px; font-size: 14px; }
+  details.ans .body b { color: #1f7a41; }
+  .sect { margin: 26px 0 4px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: #8a99b5; font-weight: 700; }
+  footer { margin-top: 30px; font-size: 12.5px; color: #8090ab; text-align: center; }
+  a { color: #2b6cb0; }
+  @media (max-width: 640px) { .wrap { padding: 14px 11px 70px; } h1 { font-size: 19px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Mock Exam &mdash; EPS + CHD</h1>
+  <p class="sub">100 high-yield single-best-answer questions covering electrophysiology (E1&ndash;E8) and congenital heart disease (C1&ndash;C7). Sit it first, then reveal answers. Aim 85+.</p>
+  <div class="bar">
+    <button id="toggle">Reveal all answers</button>
+    <button class="sec" id="top">Back to top</button>
+    <span id="prog">Answer as you go, then check.</span>
+  </div>
+  <div id="list"></div>
+  <footer>Free revision resource. Built for the just.dr.moh / drmohpioneer cardiology hubs.<br>Answers are exam-level teaching points, not clinical guidance.</footer>
+</div>
+<script>
+const D = [
+["Most common regular paroxysmal SVT in adults?",["Atrial flutter","AVRT","AVNRT","Focal atrial tachycardia"],"c","AVNRT is the commonest paroxysmal SVT (dual AV nodal physiology)."],
+["Tetralogy of Fallot consists of?",["VSD, overriding aorta, RVOT obstruction, RVH","ASD, MS, AR, LVH","Single ventricle","Transposition physiology"],"a","The classic tetrad; degree of RVOT obstruction sets the cyanosis."],
+["In CHA2DS2-VASc, which scores 2 points?",["Hypertension","Diabetes","Vascular disease","Age >=75 or prior stroke/TIA"],"d","Age >=75 and prior stroke/TIA score 2 each; the others score 1."],
+["Coarctation of the aorta typically presents with?",["Weak arm pulses, strong femorals","Upper-limb hypertension with radiofemoral delay","Cyanosis of the upper body","Continuous murmur only"],"b","Narrowing distal to the arch: arm HTN with weak/delayed femoral pulses."],
+["ECG hallmark of ARVC?",["Delta wave","Short QT","Epsilon wave + T inversion V1-V3","U waves"],"c","Epsilon wave and anterior T inversions reflect fibrofatty RV replacement."],
+["Chest X-ray in transposition of the great arteries?",["Egg on a string (narrow mediastinum)","Boot-shaped heart","Rib notching","Snowman"],"a","Oval heart on a narrow pedicle with plethoric lungs."],
+["WPW in AF with a fast irregular wide-complex tachycardia. AVOID?",["Procainamide","Ibutilide","DC cardioversion","Verapamil / adenosine / digoxin"],"d","AV nodal blockers push conduction down the pathway and risk VF."],
+["Most common congenital heart defect overall?",["ASD","VSD","PDA","TOF"],"b","VSD is the single commonest congenital defect."],
+["Type 1 Brugada pattern?",["Saddle-back ST only","Peaked T","Coved ST elevation >=2mm V1-V2","Epsilon wave"],"c","Coved (shark-fin) ST elevation in right precordial leads; SCN5A."],
+["Auscultatory hallmark of a secundum ASD?",["Wide fixed splitting of S2","Continuous murmur","Single loud S2","Mid-diastolic rumble only"],"a","Fixed split S2 from the constant left-to-right shunt."],
+["VVI pacing is most appropriate for?",["Sick sinus with intact AV node","Complete heart block needing AV sync","CRT indication","Permanent AF with slow ventricular rate"],"d","Single-chamber ventricular pacing suits AF (no atrial activity to track)."],
+["Why does squatting abort a tet spell?",["Lowers SVR","Raises SVR -> more pulmonary flow","Increases heart rate","Opens the duct"],"b","Higher systemic resistance forces more blood across the RVOT to the lungs."],
+["LQT1 arrhythmic events are triggered by?",["Rest / sleep","Loud noise / emotion","Exertion, especially swimming","Fever"],"c","LQT1 = exercise/swimming; LQT2 = emotion/noise; LQT3 = rest/sleep."],
+["The bidirectional Glenn shunt connects?",["SVC to pulmonary artery","IVC to PA","Aorta to PA","RA to RV"],"a","Glenn = SVC to PA (stage 2 of single-ventricle palliation)."],
+["Atrial flutter with 2:1 conduction gives a ventricular rate of about?",["100","200","75","150"],"d","Atrial rate ~300, 2:1 conduction = ~150. Suspect flutter at a fixed 150."],
+["Truncus arteriosus is strongly associated with?",["Turner","22q11 deletion (DiGeorge)","Trisomy 21","Marfan"],"b","Conotruncal lesion of the DiGeorge (22q11) spectrum."],
+["Best CRT candidate?",["EF 55%, narrow QRS","EF 40%, asymptomatic","EF <=35%, LBBB, QRS >=150ms, NYHA II-IV on GDMT","RBBB, QRS 130"],"c","Wide LBBB + low EF + symptoms on optimal therapy = maximal benefit."],
+["Ebstein anomaly is characterized by?",["Apically displaced tricuspid valve, atrialized RV, TR +/- WPW","Overriding aorta","Coarctation","Single ventricle"],"a","Wall-to-wall cardiomegaly, TR, associated WPW and ASD."],
+["Adenosine terminates SVT by?",["Sodium block","Beta blockade","Prolonging QT","Transient AV nodal block"],"d","It transiently blocks the AV node, breaking node-dependent circuits."],
+["Coarctation is associated with which syndrome and valve?",["Down + PDA","Turner syndrome + bicuspid aortic valve","Marfan + MVP","Noonan + PS"],"b","Turner; bicuspid aortic valve coexists in most cases."],
+["Exercise-induced bidirectional VT in a child with a normal resting ECG?",["Brugada","LQT3","CPVT","ARVC"],"c","CPVT (RyR2): beta-blockers +/- flecainide, avoid competitive exercise."],
+["The Fontan completes the circulation by connecting?",["IVC to the pulmonary arteries","SVC to PA","LV to aorta","Atria to atria"],"a","Systemic venous blood reaches the lungs passively (total cavopulmonary)."],
+["WPW resting ECG shows?",["Long PR, narrow QRS, U wave","Peaked T","Epsilon wave","Short PR, delta wave, wide QRS"],"d","Pre-excitation shortens PR and slurs the QRS upstroke (delta)."],
+["Chest X-ray in Tetralogy of Fallot?",["Egg on a string","Boot-shaped heart (coeur en sabot)","Snowman","Rib notching"],"b","Uplifted apex + concave pulmonary bay; decreased pulmonary vascularity."],
+["The AFFIRM trial showed?",["Rhythm control superior for mortality","Rate control contraindicated","Rate control not inferior for mortality in most","Rhythm control only for the young"],"c","No survival advantage of rhythm over rate control in most AF patients."],
+["Complete AVSD (AV canal) is most associated with?",["Down syndrome (trisomy 21)","Turner","DiGeorge","Marfan"],"a","Trisomy 21; ECG shows a superior/left axis."],
+["Idiopathic fascicular (left) VT is terminated by?",["Adenosine","Lidocaine","Magnesium","Verapamil"],"d","Fascicular VT (RBBB + left-axis) is verapamil-sensitive."],
+["A duct-dependent cyanotic lesion is stabilized with?",["Indomethacin","Prostaglandin E1","Oxygen","Beta-blocker"],"b","PGE1 keeps the ductus open to maintain flow before surgery."],
+["Definite indication for permanent pacing?",["Asymptomatic Mobitz I","First-degree AV block","Third-degree (complete) heart block","Sinus arrhythmia"],"c","Complete and symptomatic high-grade block warrant pacing; Mobitz I usually not."],
+["Most common congenital cardiac lesion in adults?",["Bicuspid aortic valve","VSD","ASD","TOF"],"a","Bicuspid AV is the commonest congenital lesion overall / in adults (1-2%)."],
+["Peaked, tented T waves indicate?",["Hypokalemia","Hypocalcemia","Digoxin effect","Hyperkalemia"],"d","Earliest hyperkalemia change; progresses to wide QRS then sine wave."],
+["Supracardiac TAPVC classic chest X-ray?",["Egg on a string","Snowman / figure-of-8","Boot","Coeur en sabot"],"b","Dilated vertical vein + SVC widen the mediastinum (when unobstructed)."],
+["Congenital lesion classically associated with WPW?",["TOF","ASD","Ebstein anomaly","Coarctation"],"c","Ebstein carries right-sided accessory pathways."],
+["Eisenmenger syndrome is?",["Shunt reversal (right-to-left) from irreversible pulmonary HTN -> cyanosis","A left-to-right shunt only","Valve disease","Cardiomyopathy"],"a","Chronic overflow causes pulmonary vascular disease and the shunt reverses."],
+["Orthodromic AVRT differs from AVNRT by?",["Wide QRS","Absent P waves","Irregular rhythm","Retrograde P in the ST segment (longer RP)"],"d","In AVRT the P follows the QRS in the ST-T (a longer RP than AVNRT)."],
+["Dysplastic pulmonary valve stenosis is associated with?",["Turner","Noonan syndrome","DiGeorge","Down"],"b","Noonan syndrome classically has dysplastic pulmonary stenosis."],
+["Definitive therapy to prevent SCD in high-risk patients?",["Amiodarone","Pacemaker","ICD","Ablation"],"c","ICD is the mainstay for aborted SCD / high-risk primary prevention."],
+["Pulmonary atresia with intact ventricular septum is duct-dependent for?",["Pulmonary flow","Systemic flow","Neither","Coronary flow only"],"a","No RV outflow, so pulmonary flow depends on the PDA (needs PGE1)."],
+["Strongest predictor of CRT response?",["RBBB","Non-specific IVCD","QRS 120","True LBBB with wide QRS (>=150ms)"],"d","LBBB morphology and greater QRS width predict the best response."],
+["Arterial switch cannot be done in an adult with unrepaired simple TGA because?",["The RV is too small","The LV has deconditioned (no longer systemic-trained)","The aorta is calcified","It causes flutter"],"b","After the neonatal window the LV cannot suddenly take the systemic load."],
+["Adenosine slows a regular narrow tachycardia and reveals sawtooth waves. Diagnosis?",["AVNRT","AVRT","Atrial flutter","Sinus tachycardia"],"c","Adenosine unmasks (does not terminate) flutter via transient AV block."],
+["PDA murmur?",["Continuous 'machinery' murmur, upper left sternal border","Holosystolic at apex","Mid-diastolic","Ejection click only"],"a","Continuous murmur with wide pulse pressure / bounding pulses."],
+["Acute treatment of torsades de pointes?",["Amiodarone","Adenosine","Verapamil","IV magnesium"],"d","IV magnesium; correct K+, stop QT drugs, overdrive pace if needed."],
+["First maneuver for an acute tet spell?",["Nitroprusside","Knee-to-chest position + oxygen","Digoxin","Diuretic"],"b","Knee-chest raises SVR; avoid anything that lowers SVR."],
+["Threshold to anticoagulate non-valvular AF in men?",["Score 0","Score 1 mandatory","CHA2DS2-VASc >=2","Any age"],"c","Men >=2 (women >=3) anticoagulate; score 1 in men is 'consider'."],
+["Supravalvular aortic stenosis + elfin facies + hypercalcemia?",["Williams syndrome","Noonan","DiGeorge","Turner"],"a","Williams (elastin / 7q11 deletion); HIGH calcium, unlike DiGeorge."],
+["ARVC ventricular tachycardia typically shows which morphology?",["RBBB, right axis","Narrow QRS","Polymorphic","LBBB morphology (RV origin)"],"d","RV origin gives an LBBB pattern; exercise provokes it."],
+["Reversed differential cyanosis (blue upper, pink lower) occurs in?",["Simple PDA","TGA with coarctation / PPHN","VSD","Ebstein"],"b","Only transposition physiology sends more oxygenated blood to the lower body."],
+["Pacemaker syndrome is caused by?",["Lead fracture","Oversensing","Loss of AV synchrony (VVI with retrograde conduction)","Infection"],"c","AV dyssynchrony -> cannon A waves, low output; fixed by dual-chamber pacing."],
+["TGA + VSD + severe pulmonary stenosis presenting late: biventricular repair of choice?",["Rastelli (LV->aorta baffle + RV->PA conduit)","Arterial switch","Fontan always","Glenn"],"a","Rastelli suits this combo; Fontan is the fallback only if anatomy blocks it."],
+["Typical AVNRT on ECG?",["Long RP tachycardia","Delta wave","Sawtooth waves","Pseudo-r' in V1 / pseudo-S inferior"],"d","Retrograde P is buried in the QRS as a pseudo-r' (V1) and pseudo-S (inferior)."],
+["Coarctation chest X-ray signs?",["Snowman","Rib notching + figure-3 sign","Boot shape","Egg on a string"],"b","Rib notching (collateral intercostals) and the figure-3 aortic contour."],
+["Preferred anticoagulant in most non-valvular AF?",["Warfarin","Aspirin","DOAC","Long-term LMWH"],"c","DOACs are first-line except mechanical valves or mod-severe mitral stenosis."],
+["Tricuspid atresia classic ECG?",["Left axis deviation + LVH (small RV)","Right axis + RVH","Delta wave","Short QT"],"a","Superior/left axis with LV dominance; needs an ASD and VSD/PDA."],
+["Idiopathic RVOT ventricular tachycardia is characteristically?",["Scar-related, poor prognosis","Verapamil-sensitive fascicular","Torsades","LBBB + inferior axis, benign, adenosine-sensitive"],"d","Benign outflow-tract VT in structurally normal hearts, adenosine-sensitive."],
+["Obstructed TAPVC presents as?",["Boot-shaped heart","Severe cyanosis + pulmonary edema with a normal-sized heart (emergency)","Asymptomatic murmur","Rib notching"],"b","Pulmonary venous obstruction floods the lungs; small heart + edema is the clue."],
+["A delta wave positive in V1 localizes the pathway to?",["Right free wall","Anteroseptal","Left-sided","None"],"c","Positive delta in V1 points to a left-sided accessory pathway."],
+["Correct management of established Eisenmenger physiology?",["Avoid defect closure; supportive care, avoid pregnancy","Close the defect urgently","Diuretics only","Balloon dilation"],"a","Closing the defect removes the pop-off valve and is fatal once PVR is fixed."],
+["Normal PR interval?",["80-120ms","200-280ms","<80ms","120-200ms"],"d","120-200ms (3-5 small squares); >200 = first-degree AV block."],
+["Child with stridor and dysphagia relieved by neck extension, plus an aortic anomaly?",["Coarctation","Vascular ring (double aortic arch)","PDA","ASD"],"b","A vascular ring compresses trachea and esophagus (dysphagia lusoria)."],
+["Polymorphic VT with a normal QT during acute chest pain is usually due to?",["LQTS","CPVT","Acute ischemia","Brugada"],"c","Ischemia is the leading cause when QT is normal; torsades needs a long QT."],
+["Emergency palliation in TGA with a restrictive atrial septum?",["Balloon atrial septostomy (Rashkind) + PGE1","Immediate arterial switch","Fontan","Glenn"],"a","Improve mixing (septostomy + keep duct open) first, then arterial switch."],
+["A pacing spike with no subsequent depolarization is?",["Undersensing","Oversensing","Normal function","Failure to capture"],"d","Spike present but no depolarization = failure to capture (threshold/lead/battery)."],
+["Main long-term problem after Tetralogy of Fallot repair?",["Aortic stenosis","Pulmonary regurgitation -> RV dilation, risk of VT/SCD","Mitral stenosis","Coarctation"],"b","Chronic PR drives RV dilation; timing of pulmonary valve replacement is key."],
+["Ablation target for typical atrial flutter?",["Pulmonary veins","Slow pathway","Cavotricuspid isthmus","His bundle"],"c","Typical flutter circles the tricuspid annulus through the cavotricuspid isthmus."],
+["A cyanotic newborn given 100% O2 whose PaO2 barely rises has?",["A cardiac (right-to-left shunt) cause","Lung disease","Methemoglobinemia only","Normal physiology"],"a","Fixed shunt cyanosis fails to correct with oxygen (positive hyperoxia test)."],
+["First-line drug for symptomatic congenital Long QT syndrome?",["Sotalol","Flecainide","Verapamil","Beta-blockers"],"d","Beta-blockers plus avoiding QT-prolonging drugs; ICD if high risk."],
+["Ostium primum ASD / AVSD ECG axis?",["Right axis","Left axis deviation","Short QT","Delta wave"],"b","Primum/AVSD gives a superior/left axis; secundum gives right axis + RBBB."],
+["Poor CRT responder profile?",["LBBB 160ms","Female with LBBB","Non-LBBB/RBBB, QRS <150, large ischemic scar","NYHA III"],"c","LBBB 160ms is a GOOD responder; non-LBBB, narrow QRS and scar respond poorly."],
+["Interrupted aortic arch is most associated with?",["22q11 deletion (DiGeorge)","Trisomy 21","Turner","Marfan"],"a","IAA (esp. type B) is part of the conotruncal / 22q11 spectrum."],
+["Antidromic AVRT produces?",["Narrow QRS","Sawtooth waves","Irregular rhythm","Wide QRS (antegrade down the pathway)"],"d","Down the pathway, up the node: the ventricles are pre-excited -> wide QRS."],
+["Adult with cyanosis, clubbing, loud P2 and an old unrepaired VSD has?",["Simple VSD","Eisenmenger syndrome","Coarctation","TOF"],"b","A long-standing left-to-right shunt reversed by pulmonary vascular disease."],
+["HAS-BLED score assesses?",["Stroke risk","Rate control","Bleeding risk on anticoagulation","CRT response"],"c","It flags modifiable bleeding risks; high score = address risks, not withhold."],
+["Commonest cyanotic CHD presenting on the first day of life?",["TGA","TOF","Tricuspid atresia","TAPVC"],"a","TGA presents earliest; TOF is commonest cyanotic lesion beyond the newborn."],
+["ECG finding that proves VT over SVT with aberrancy?",["Rate >150","Regular rhythm","Wide QRS alone","AV dissociation / capture / fusion beats"],"d","AV dissociation with capture/fusion beats is diagnostic of VT."],
+["Essential requirement for a successful Fontan?",["High PVR","Low pulmonary vascular resistance","High LA pressure","AV block"],"b","With no sub-pulmonary pump, flow is passive, so PVR must be low."],
+["Feature favoring focal atrial tachycardia?",["Pseudo-r' in V1","Delta wave","Warm-up/cool-down, P different from sinus, persists through AV block","Fixed rate of 150"],"c","AT is atrial (not node-dependent), so it persists through AV block."],
+["Commonest cause of congenital aortic stenosis?",["Bicuspid aortic valve","Rheumatic","Supravalvular only","Calcific"],"a","Bicuspid valve; supravalvular AS links to Williams syndrome."],
+["A short QT interval is associated with?",["Hypocalcemia","Hypokalemia","Hypothermia","Hypercalcemia"],"d","Hypercalcemia shortens QT; hypocalcemia and hypokalemia prolong it."],
+["Drug in pregnancy linked to Ebstein anomaly?",["Warfarin","Lithium","Phenytoin","Alcohol"],"b","Maternal lithium is the classic association."],
+["In the NBG pacemaker code, the first letter denotes?",["Chamber sensed","Response","Chamber paced","Rate modulation"],"c","Order is Paced, Sensed, Response, Rate-modulation (e.g., DDDR)."],
+["Congenital shunt often first diagnosed in adulthood with AF and paradoxical emboli?",["Secundum ASD","VSD","PDA","Coarctation"],"a","ASD may be silent until adult AF, RV dilation, or paradoxical embolism."],
+["Brugada arrhythmias are provoked by?",["Exercise","Standing","Beta-agonists","Fever and sodium-channel blockers"],"d","Fever and Na-channel blockers unmask it; events occur at rest/sleep. ICD is definitive."],
+["Hypoplastic left heart syndrome is managed by?",["Arterial switch","Staged Norwood -> Glenn -> Fontan","Rastelli","Closure device"],"b","Single-ventricle palliation; duct-dependent systemic circulation (PGE1 at birth)."],
+["Delta waves negative in II, III, aVF suggest which pathway?",["Left lateral","Right anterior","Posteroseptal","Midseptal"],"c","Inferiorly negative delta = inferior / posteroseptal insertion."],
+["Long-term Fontan complications include?",["Protein-losing enteropathy, atrial arrhythmia, hepatic congestion","Aortic stenosis","Rib notching","Delta waves"],"a","Chronic venous congestion -> PLE, arrhythmias, Fontan-associated liver disease."],
+["AF patient with a mechanical mitral valve requires?",["Apixaban","Dabigatran","Rivaroxaban","Warfarin (VKA)"],"d","DOACs are contraindicated with mechanical valves; use warfarin."],
+["A louder, harsher VSD murmur usually means?",["A larger defect","A smaller (restrictive) defect","Eisenmenger","A closed defect"],"b","Small VSDs are loud (maladie de Roger); large ones cause failure, less noise."],
+["Failure to output (no spike when due), the device inhibited by non-cardiac signals, is?",["Failure to capture","Lead dislodgement","Oversensing","Normal"],"c","Oversensing (myopotentials/EMI) makes the device withhold pacing."],
+["Which adult CHD patient should be strongly advised against pregnancy?",["Eisenmenger syndrome / severe pulmonary HTN","Repaired small ASD","Mild PS","Repaired PDA"],"a","Maternal mortality is very high (~30-50%) in Eisenmenger / severe PAH."],
+["Commonest cause of sudden cardiac death in a young athlete?",["Coronary disease","Myocarditis","LQTS","HCM"],"d","HCM is the leading structural cause in the young."],
+["Differential cyanosis (pink upper body, blue lower body) suggests?",["TGA","Coarctation / interrupted arch with PDA","TOF","ASD"],"b","Deoxygenated blood reaches the lower body via the duct distal to the obstruction."],
+["CRT works by?",["Rate support only","Defibrillation","Resynchronizing LV and RV via biventricular pacing","AV node ablation"],"c","Biventricular pacing corrects the dyssynchronous contraction of LBBB."],
+["Congenitally corrected TGA (L-TGA) long-term issue?",["Systemic RV failure + AV block","Coarctation","Aortic stenosis","None"],"a","The morphologic RV supports the systemic circulation and eventually fails."],
+["A 'concealed' accessory pathway means?",["Septal location","Right-sided","Dual AV nodes","No delta wave at rest (conducts only retrograde)"],"d","It conducts only retrograde, so the resting ECG is normal but AVRT can occur."],
+["A small restrictive VSD with no pulmonary hypertension needs?",["Urgent surgery","Endocarditis awareness + follow-up (many close spontaneously)","Eisenmenger workup","Fontan"],"b","Small VSDs often close on their own; monitor."],
+["RBBB criteria include?",["Broad monophasic R in V6","Short PR","QRS >=120ms, rSR' in V1, wide S in I/V6","Delta wave"],"c","rSR' (M) in V1 and slurred S in lateral leads."],
+["Definitive repair for simple TGA?",["Arterial switch (neonatal)","Senning","Mustard","Rastelli"],"a","Arterial switch in the first weeks while the LV is still systemic-conditioned."],
+["Stroke prevention in AF when anticoagulation is contraindicated?",["Pacemaker","AV node ablation","CRT","Left atrial appendage occlusion (Watchman)"],"d","LAA closure targets the main thrombus source when OAC cannot be used."],
+["To pharmacologically close a PDA in a preterm neonate?",["Prostaglandin E1","Indomethacin / ibuprofen","Adenosine","Digoxin"],"b","Prostaglandin inhibitors close it; PGE1 keeps it open (opposite goal)."]
+];
+const LETT = ["a","b","c","d"];
+const list = document.getElementById('list');
+D.forEach((row, i) => {
+  const [stem, opts, ans, exp] = row;
+  const div = document.createElement('div');
+  div.className = 'q';
+  div.id = 'q' + (i+1);
+  let html = '<div class="stem"><span class="n">' + (i+1) + '.</span> ' + stem + '</div><ul class="opts">';
+  opts.forEach((o, j) => { html += '<li><span class="lt">' + LETT[j] + ')</span>' + o + '</li>'; });
+  html += '</ul>';
+  const ai = LETT.indexOf(ans);
+  html += '<details class="ans"><summary>Show answer</summary><div class="body"><b>Answer: ' + ans + ') ' + opts[ai] + '</b><br>' + exp + '</div></details>';
+  div.innerHTML = html;
+  list.appendChild(div);
+});
+let open = false;
+const btn = document.getElementById('toggle');
+btn.addEventListener('click', () => {
+  open = !open;
+  document.querySelectorAll('details.ans').forEach(d => d.open = open);
+  btn.textContent = open ? 'Hide all answers' : 'Reveal all answers';
+  if (open) window.scrollTo({top:0, behavior:'smooth'});
+});
+document.getElementById('top').addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+</script>
+</body>
+</html>
