@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mock Exam — EPS + CHD (100 Q)</title>
+<title>Mock Exam — EPS + CHD (106 Q)</title>
 <style>
   * { box-sizing: border-box; }
   body { margin: 0; font: 15px/1.55 -apple-system, "Segoe UI", Roboto, sans-serif; color: #1a2230; background: #f4f6fb; }
@@ -36,7 +36,7 @@
 <body>
 <div class="wrap">
   <h1>Mock Exam &mdash; EPS + CHD</h1>
-  <p class="sub">100 high-yield single-best-answer questions covering electrophysiology (E1&ndash;E8) and congenital heart disease (C1&ndash;C7). Sit it first, then reveal answers. Aim 85+.</p>
+  <p class="sub">106 high-yield single-best-answer questions covering electrophysiology (E1&ndash;E8) and congenital heart disease (C1&ndash;C7). Sit it first, then reveal answers. Aim 85+.</p>
   <div class="bar">
     <button id="toggle">Reveal all answers</button>
     <button class="sec" id="top">Back to top</button>
@@ -147,6 +147,13 @@ const D = [
 ["Definitive repair for simple TGA?",["Arterial switch (neonatal)","Senning","Mustard","Rastelli"],"a","Arterial switch in the first weeks while the LV is still systemic-conditioned."],
 ["Stroke prevention in AF when anticoagulation is contraindicated?",["Pacemaker","AV node ablation","CRT","Left atrial appendage occlusion (Watchman)"],"d","LAA closure targets the main thrombus source when OAC cannot be used."],
 ["To pharmacologically close a PDA in a preterm neonate?",["Prostaglandin E1","Indomethacin / ibuprofen","Adenosine","Digoxin"],"b","Prostaglandin inhibitors close it; PGE1 keeps it open (opposite goal)."]
+  ["Normal HV interval?",["10-25 ms","35-55 ms","90-120 ms","200-300 ms"],"b","HV = His to ventricle (His-Purkinje conduction). A long HV over 55, especially over 70 ms, is infra-Hisian disease and gets paced."],
+  ["Upper limit of a normal corrected sinus node recovery time (cSNRT)?",["150 ms","350 ms","525 ms","1500 ms"],"c","cSNRT = SNRT minus the sinus cycle length; normal under 525 ms. Raw SNRT under 1500 ms is the distractor."],
+  ["Sure sign of successful ablation of a CONCEALED accessory pathway?",["Loss of the delta wave","VA dissociation during ventricular pacing","PR prolongation","Longer QT"],"b","Concealed = retrograde only, no delta to lose. Success = loss of retrograde conduction = VA dissociation during ventricular pacing. Loss of delta is the sign for a manifest pathway."],
+  ["Most common site of origin of LEFT atrial tachycardia?",["Mitral annulus","Left atrial appendage","Pulmonary veins","Coronary sinus"],"c","Pulmonary vein ostia and sleeves are the number 1 left-AT focus, the same hotspot as AF triggers. Mitral annulus is lower-tier."],
+  ["Which pacing mode does NOT have an upper rate?",["AAIR","VVI","DDD","VDD"],"b","VVI has no sensor and no atrial tracking, so no upper rate. AAIR has a sensor rate; DDD and VDD track the atrium."],
+  ["Commonest site of focal atrial tachycardia in the RIGHT atrium?",["Tricuspid annulus","Crista terminalis","Coronary sinus os","AV node"],"b","Crista terminalis is the number 1 right-atrial focus (about two-thirds of focal ATs are right-sided). Tricuspid annulus is a lesser site."],
+  ["Which does NOT shorten the QT interval?",["Hypercalcaemia","Hyperkalaemia","Digoxin","Flecainide"],"d","Flecainide (Class Ic) widens QRS but does not shorten QT. Hypercalcaemia, hyperkalaemia and digoxin all shorten it."],
 ];
 const LETT = ["a","b","c","d"];
 const list = document.getElementById('list');

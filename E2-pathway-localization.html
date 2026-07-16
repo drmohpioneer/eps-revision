@@ -77,6 +77,52 @@
   </div>
 
   <div class="card">
+    <h2>Ablation endpoint: did the concealed pathway die?</h2>
+    <p class="sub" style="margin:-4px 0 12px">A concealed pathway has <b>no delta</b> (it conducts retrograde only), so you cannot watch a delta disappear. You test the one thing it does: retrograde (VA) conduction during <b>ventricular pacing</b>. Toggle before vs after the burn.</p>
+    <svg viewBox="0 0 500 220" id="va-stage" aria-label="VA conduction ladder before and after ablation">
+      <defs><marker id="va-arrow" markerWidth="9" markerHeight="9" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#e53e3e"/></marker></defs>
+      <line x1="70" y1="70" x2="470" y2="70" stroke="#2b3552" stroke-width="1"/>
+      <line x1="70" y1="185" x2="470" y2="185" stroke="#2b3552" stroke-width="1"/>
+      <text x="16" y="74" fill="#95a1bd" font-size="13" font-weight="700">A</text>
+      <text x="8" y="189" fill="#95a1bd" font-size="11" font-weight="700">V·pace</text>
+      <g stroke="#7aa2ff" stroke-width="2">
+        <line x1="110" y1="150" x2="110" y2="188"/><line x1="180" y1="150" x2="180" y2="188"/><line x1="250" y1="150" x2="250" y2="188"/><line x1="320" y1="150" x2="320" y2="188"/><line x1="390" y1="150" x2="390" y2="188"/>
+      </g>
+      <g fill="#7aa2ff" font-size="10" text-anchor="middle">
+        <text x="110" y="205">S</text><text x="180" y="205">S</text><text x="250" y="205">S</text><text x="320" y="205">S</text><text x="390" y="205">S</text>
+      </g>
+      <g id="va-before">
+        <g stroke="#e53e3e" stroke-width="2" marker-end="url(#va-arrow)">
+          <line x1="110" y1="150" x2="124" y2="76"/><line x1="180" y1="150" x2="194" y2="76"/><line x1="250" y1="150" x2="264" y2="76"/><line x1="320" y1="150" x2="334" y2="76"/><line x1="390" y1="150" x2="404" y2="76"/>
+        </g>
+        <g fill="#e53e3e"><circle cx="124" cy="70" r="4"/><circle cx="194" cy="70" r="4"/><circle cx="264" cy="70" r="4"/><circle cx="334" cy="70" r="4"/><circle cx="404" cy="70" r="4"/></g>
+      </g>
+      <g id="va-after" style="display:none">
+        <g fill="#38a169"><circle cx="100" cy="70" r="4"/><circle cx="205" cy="70" r="4"/><circle cx="310" cy="70" r="4"/><circle cx="415" cy="70" r="4"/></g>
+        <text x="270" y="118" fill="#95a1bd" font-size="11" text-anchor="middle">no retrograde link, atria march on their own rate</text>
+      </g>
+    </svg>
+    <div class="rule" id="va-cap"><b style="color:#e53e3e">Before ablation:</b> every ventricular paced beat (S) conducts back up 1:1 to the atria, so the retrograde pathway is still alive.</div>
+    <button id="va-toggle" style="margin-top:10px;background:#1c2540;color:#e8ecf5;border:1px solid #2b3552;border-radius:8px;padding:8px 14px;font-size:14px;font-weight:700;cursor:pointer">▶ Show after ablation</button>
+    <div class="rule" style="margin-top:10px"><b>The tested sign:</b> for a <b>concealed</b> pathway, <b>VA dissociation during ventricular pacing = the pathway is dead.</b> (A manifest pathway instead shows loss of the delta wave.)</div>
+  </div>
+  <script>
+  (function(){
+    var b=document.getElementById('va-toggle'),before=document.getElementById('va-before'),
+        after=document.getElementById('va-after'),cap=document.getElementById('va-cap'),on=false;
+    b.addEventListener('click',function(){
+      on=!on;
+      before.style.display=on?'none':'';
+      after.style.display=on?'':'none';
+      cap.innerHTML=on
+        ?'<b style="color:#38a169">After ablation:</b> the atria keep firing at their own sinus rate with no 1:1 relation to the paced beats. That is <b>VA dissociation</b>, and the retrograde route is gone = success.'
+        :'<b style="color:#e53e3e">Before ablation:</b> every ventricular paced beat (S) conducts back up 1:1 to the atria, so the retrograde pathway is still alive.';
+      b.textContent=on?'◀ Show before ablation':'▶ Show after ablation';
+    });
+  })();
+  </script>
+
+  <div class="card">
     <h2>Real WPW ECG — spot the delta</h2>
     <figure>
       <figcaption>Sinus rhythm, WPW: short PR + slurred QRS upstroke (delta wave)</figcaption>
