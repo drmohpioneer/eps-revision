@@ -39,6 +39,9 @@
     .hint { padding: 2px 10px 6px; font-size: 10px; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
     .hint::-webkit-scrollbar { display: none; }
   }
+  footer { flex: 0 0 auto; background: #12233f; border-top: 1px solid #24406a; padding: 7px 14px; text-align: center; font-size: 11.5px; color: #6f83a3; }
+  footer a { color: #7fb2f0; text-decoration: none; font-weight: 600; border-bottom: 1px dotted #4a6488; }
+  footer a:hover { color: #a9cbf3; }
 </style>
 </head>
 <body>
@@ -59,6 +62,30 @@
   <iframe id="viewer" title="lesson" loading="lazy"></iframe>
   <div class="spin" id="spin">Loading lesson…</div>
 </main>
+<footer>
+  &copy; <span id="yr">2026</span> &middot; built by <a href="https://drmohpioneer.github.io/justdrmoh/" target="_blank" rel="noopener">Dr.&nbsp;Mohamed</a>
+</footer>
+<script>
+// --- open tracker (logs anyone but you to a Google Sheet you own) ---
+const TRACKER_URL = "https://script.google.com/macros/s/AKfycbzSLVp9HB5slcSt-E7Ewf2mbe0YrUEoXkUi5KI41CT-Nn-WIHzMbaHU8vDnYla45Cat/exec";
+(function track(){
+  try {
+    const params = new URLSearchParams(location.search);
+    if (params.get('me') === '1') localStorage.setItem('rev_owner', '1');  // one-time: mark this device as yours
+    if (localStorage.getItem('rev_owner') === '1') return;                 // never log the owner
+    if (!/^https?:\/\//.test(TRACKER_URL)) return;                         // dormant until URL is set
+    const q = new URLSearchParams({
+      page: 'EPS',
+      ref: document.referrer || '',
+      tz: (Intl.DateTimeFormat().resolvedOptions().timeZone) || '',
+      lang: navigator.language || '',
+      scr: screen.width + 'x' + screen.height
+    });
+    new Image().src = TRACKER_URL + '?' + q.toString();
+  } catch (e) {}
+})();
+try { document.getElementById('yr').textContent = new Date().getFullYear(); } catch (e) {}
+</script>
 <script>
 const FILES = ["E1-svt-mechanisms.html", "E2-pathway-localization.html", "E3-pacing.html", "E4-crt.html", "E5-vt-arvc.html", "E6-channelopathies-scd.html", "E7-ecg-rules.html", "E8-af-anticoagulation.html"];
 const TABS = ["E1 \u00b7 SVT", "E2 \u00b7 WPW", "E3 \u00b7 Pacing", "E4 \u00b7 CRT", "E5 \u00b7 VT/ARVC", "E6 \u00b7 Channelo.", "E7 \u00b7 ECG rules", "E8 \u00b7 AF/OAC"];
