@@ -39,9 +39,6 @@
     .hint { padding: 2px 10px 6px; font-size: 10px; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
     .hint::-webkit-scrollbar { display: none; }
   }
-  footer { flex: 0 0 auto; background: #12233f; border-top: 1px solid #24406a; padding: 7px 14px; text-align: center; font-size: 11.5px; color: #6f83a3; }
-  footer a { color: #7fb2f0; text-decoration: none; font-weight: 600; border-bottom: 1px dotted #4a6488; }
-  footer a:hover { color: #a9cbf3; }
 </style>
 </head>
 <body>
@@ -56,15 +53,12 @@
     </span>
   </div>
   <div class="tabs" id="tabs"></div>
-  <div class="hint">PDFs (new tab): <a href="EPS-studybook.pdf" target="_blank" rel="noopener">Study Book</a> &middot; <a href="EPS-cheatsheet.pdf" target="_blank" rel="noopener">Cheat Sheet</a> &middot; <a href="eps-mindmap.html" target="_blank" rel="noopener">Mind map</a> &nbsp;|&nbsp; Tabs, Prev / Next, or arrow keys; each lesson loads only when opened.</div>
+  <div class="hint">PDFs (new tab): <a href="EPS-studybook.pdf" target="_blank" rel="noopener">Study Book</a> &middot; <a href="EPS-cheatsheet.pdf" target="_blank" rel="noopener">Cheat Sheet</a> &middot; <a href="eps-mindmap.html" target="_blank" rel="noopener">Mind map</a> &nbsp;|&nbsp; Tabs, Prev / Next, or arrow keys &nbsp;|&nbsp; built by <a href="https://drmohpioneer.github.io/justdrmoh/" target="_blank" rel="noopener" style="color:#7fb2f0;font-weight:600">Dr.&nbsp;Mohamed</a></div>
 </header>
 <main>
   <iframe id="viewer" title="lesson" loading="lazy"></iframe>
   <div class="spin" id="spin">Loading lesson…</div>
 </main>
-<footer>
-  &copy; <span id="yr">2026</span> &middot; built by <a href="https://drmohpioneer.github.io/justdrmoh/" target="_blank" rel="noopener">Dr.&nbsp;Mohamed</a>
-</footer>
 <script>
 // --- open tracker (logs anyone but you to a Google Sheet you own) ---
 const TRACKER_URL = "https://script.google.com/macros/s/AKfycbzSLVp9HB5slcSt-E7Ewf2mbe0YrUEoXkUi5KI41CT-Nn-WIHzMbaHU8vDnYla45Cat/exec";
@@ -84,7 +78,6 @@ const TRACKER_URL = "https://script.google.com/macros/s/AKfycbzSLVp9HB5slcSt-E7E
     new Image().src = TRACKER_URL + '?' + q.toString();
   } catch (e) {}
 })();
-try { document.getElementById('yr').textContent = new Date().getFullYear(); } catch (e) {}
 </script>
 <script>
 const FILES = ["E1-svt-mechanisms.html", "E2-pathway-localization.html", "E3-pacing.html", "E4-crt.html", "E5-vt-arvc.html", "E6-channelopathies-scd.html", "E7-ecg-rules.html", "E8-af-anticoagulation.html"];
